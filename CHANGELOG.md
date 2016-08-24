@@ -7,5 +7,5 @@ Features:
   - Created README.md with documentation, requirements
   - Created CHANGELOG.md with latest changes
 
-# Previous version
+## Previous version
 https://www.domoticz.com/forum/viewtopic.php?f=31&t=7312&hilit=smappee&start=20
