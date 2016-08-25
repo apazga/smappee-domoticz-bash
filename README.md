@@ -56,14 +56,15 @@ sudo apt-get update && sudo apt-get install curl sed bc
 
 1. Edit required variables in `smappee_bash_extractor.sh` script. You should configure all variables included in "User configurable values zone".
   **WARNING**: Check twice the idx for each variable in your Domoticz Device list to ensure all match, to avoid "pushing" data to a different sensor
+
   You should configure the following variables:
-  * DOMOTICZ_URL: Specify your Domoticz URL, using http or https (depending on your Domoticz configuration)
-  * SMAPPEE_IP: The IP of your Smappee hub
-  * TMPDIR: Temporary directory for the script (see section "Suggestion: Use a RAM Disk")
-  * DOMOTICZ_WATTS_IDX: idx for your Electric (Instant+Counter) virtual sensor
-  * DOMOTICZ_VOLTS_IDX: idx for your Voltage virtual sensor
-  * DOMOTICZ_AMPS_IDX: idx for your Ampere (1 phase) virtual sensor
-  * DOMOTICZ_COSF_IDX: idx for your Custom sensor (cos phi) virtual sensor
+  * **DOMOTICZ_URL**: Specify your Domoticz URL, using http or https (depending on your Domoticz configuration)
+  * **SMAPPEE_IP**: The IP of your Smappee hub
+  * **TMPDIR**: Temporary directory for the script (see section "Suggestion: Use a RAM Disk")
+  * **DOMOTICZ_WATTS_IDX**: idx for your Electric (Instant+Counter) virtual sensor
+  * **DOMOTICZ_VOLTS_IDX**: idx for your Voltage virtual sensor
+  * **DOMOTICZ_AMPS_IDX**: idx for your Ampere (1 phase) virtual sensor
+  * **DOMOTICZ_COSF_IDX**: idx for your Custom sensor (cos phi) virtual sensor
 
 1. Test it before setting it as a cron job
   ```bash
