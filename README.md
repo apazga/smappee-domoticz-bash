@@ -1,5 +1,10 @@
 **Table of Contents**
 - [Smappee Domoticz Bash Scripts](#)
+  - [Author](#)
+  - [Requirements](#)
+  - [How to use it](#)
+  - [Cron example to run this script every minute](#)
+  - [Suggestion: Use a RAM Disk](#)
   - [Controlling Smappee plugs from Domoticz](#)
 
 # Smappee Domoticz Bash Scripts
