@@ -103,6 +103,8 @@ tmpfs /var/tmp tmpfs nodev,nosuid,size=1M 0 0
 More info and RAM Disk tutorial here: http://www.domoticz.com/wiki/Setting_up_a_RAM_drive_on_Raspberry_Pi
 
 ## Controlling Smappee plugs from Domoticz
+
+**First, in your Domoticz server terminal**
 1. Copy smappee_plug_control.sh to the desired location
   ```bash
   cp smappee-domoticz-bash/smappee_plug_control.sh  /home/pi/_scripts/
@@ -115,7 +117,8 @@ More info and RAM Disk tutorial here: http://www.domoticz.com/wiki/Setting_up_a_
 chmod u+x smappee_plug_control.sh
 ./smappee_plug_control.sh list
 ```
-1. You'll see an output like this one:
+
+You'll see an output like this one:
 ```bash
 Listing available plugs
 Login...
@@ -124,6 +127,8 @@ Login...
 Available plugs:
 [{"value":"My plug 1 ","key":"1"},{"value":"My plug 2 ","key":"3"}]
 ```
+
+**Then, in your Domoticz web:**
 1. Add a new "Manual Switch" in your Domoticz server and use Switch Type "On/Off" and Type "X10" (type isn't important here).
 
 1. Edit your new switch and set these scripts as "on/off" actions:
