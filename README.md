@@ -117,7 +117,6 @@ chmod u+x smappee_plug_control.sh
 ```
 
 1. You'll see an output like this one:
-
 ```bash
 Listing available plugs
 Login...
@@ -130,7 +129,6 @@ Available plugs:
 1. Add a new "Manual Switch" in your Domoticz server and use Switch Type "On/Off" and Type "X10" (type isn't important here).
 
 1. Edit your new switch and set these scripts as "on/off" actions:
-
 ```bash
 On action: script:///home/pi/_scripts/smappee_plug_control.sh 1 3
 Off action: script:///home/pi/_scripts/smappee_plug_control.sh 0 3
