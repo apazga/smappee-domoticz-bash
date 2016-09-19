@@ -1,3 +1,11 @@
+## 2.1.0 (2016-08-24)
+
+Features:
+
+  - Added script for controlling Smappee plugs from Domoticz via script
+  - Added support for listing Smappee plugs available (to get the key)
+
+
 ## 2.0.0 (2016-08-24)
 
 Features:

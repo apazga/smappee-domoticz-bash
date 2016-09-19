@@ -1,14 +1,20 @@
-# Smappee Domoticz Bash Script
-Bash script to get values from Smappee hub (locally) and upload them to Domoticz.
+**Table of Contents**
+- [Smappee Domoticz Bash Scripts](#)
+  - [Controlling Smappee plugs from Domoticz](#)
 
-It uses Smappee local API and upload the extracted values to a Domoticz dummy sensor using the API.
+# Smappee Domoticz Bash Scripts
+Bash scripts to:
+- Gather values from Smappee hub (locally) and upload them to Domoticz
+- Control Smappee plugs
+
+Scripts use Smappee local API to control plugs and to get the Smappee data. A dummy sensor and Domoticz API is used to push the data.
 
 ## Author
-I saw this great and original idea in [Domoticz Forums](https://www.domoticz.com/forum/viewtopic.php?f=31&t=7312&hilit=smappee&start=20) so all the credit goes to user **niceandeasy**.
+I saw the initial great and original idea in [Domoticz Forums](https://www.domoticz.com/forum/viewtopic.php?f=31&t=7312&hilit=smappee&start=20) so all the credit goes to user **niceandeasy**.
 
-I just improved the bash script code and documented this repo to help other users to set it up.
+I just improved the bash script code and documented this repo to help other users to set it up and added a secondary script to control Smappee plugs.
 
-Any other suggestion will be welcome and pull-request are welcome too.
+Any other suggestion will be welcome and pull-requests are welcome too.
 
 ## Requirements
 3 basic commands are required in the script:
@@ -89,3 +95,39 @@ tmpfs /var/tmp tmpfs nodev,nosuid,size=1M 0 0
 ```
 
 More info and RAM Disk tutorial here: http://www.domoticz.com/wiki/Setting_up_a_RAM_drive_on_Raspberry_Pi
+
+## Controlling Smappee plugs from Domoticz
+1. Copy smappee_plug_control.sh to the desired location
+  ```bash
+  cp smappee-domoticz-bash/smappee_plug_control.sh  /home/pi/_scripts/
+  ```
+
+1. Edit the script to set your Smappee IP.
+
+1. Run the script with "list" parameter to list your available plugs using the local API.
+```bash
+chmod u+x smappee_plug_control.sh
+./smappee_plug_control.sh list
+```
+
+You'll see an output like this one:
+
+```bash
+Listing available plugs
+Login...
+{"success":"Logon successful!","header":"Logon to the monitor portal successful..."}
+
+Available plugs:
+[{"value":"My plug 1 ","key":"1"},{"value":"My plug 2 ","key":"3"}]
+```
+
+1. Add a new "Manual Switch" in your Domoticz server and use Switch Type "On/Off" and Type "X10" (type isn't important here).
+
+1. Edit your new switch and set these scripts as "on/off" actions:
+
+```bash
+On action: script:///home/pi/_scripts/smappee_plug_control.sh 1 3
+Off action: script:///home/pi/_scripts/smappee_plug_control.sh 0 3
+```
+
+These commands should power on/off the plug with key (id) 3, that will be "My plug 2" from the previous example.
