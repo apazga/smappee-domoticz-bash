@@ -108,15 +108,15 @@ More info and RAM Disk tutorial here: http://www.domoticz.com/wiki/Setting_up_a_
   cp smappee-domoticz-bash/smappee_plug_control.sh  /home/pi/_scripts/
   ```
 
-1. Edit the script to set your Smappee IP.
+2. Edit the script to set your Smappee IP.
 
-1. Run the script with "list" parameter to list your available plugs using the local API.
+3. Run the script with "list" parameter to list your available plugs using the local API.
 ```bash
 chmod u+x smappee_plug_control.sh
 ./smappee_plug_control.sh list
 ```
 
-1. You'll see an output like this one:
+. You'll see an output like this one:
 ```bash
 Listing available plugs
 Login...
@@ -126,9 +126,9 @@ Available plugs:
 [{"value":"My plug 1 ","key":"1"},{"value":"My plug 2 ","key":"3"}]
 ```
 
-1. Add a new "Manual Switch" in your Domoticz server and use Switch Type "On/Off" and Type "X10" (type isn't important here).
+4. Add a new "Manual Switch" in your Domoticz server and use Switch Type "On/Off" and Type "X10" (type isn't important here).
 
-1. Edit your new switch and set these scripts as "on/off" actions:
+5. Edit your new switch and set these scripts as "on/off" actions:
 ```bash
 On action: script:///home/pi/_scripts/smappee_plug_control.sh 1 3
 Off action: script:///home/pi/_scripts/smappee_plug_control.sh 0 3
