@@ -105,6 +105,7 @@ More info and RAM Disk tutorial here: http://www.domoticz.com/wiki/Setting_up_a_
 ## Controlling Smappee plugs from Domoticz
 
 **First, in your Domoticz server terminal**
+
 1. Copy smappee_plug_control.sh to the desired location
   ```bash
   cp smappee-domoticz-bash/smappee_plug_control.sh  /home/pi/_scripts/
@@ -129,6 +130,7 @@ Available plugs:
 ```
 
 **Then, in your Domoticz web:**
+
 1. Add a new "Manual Switch" in your Domoticz server and use Switch Type "On/Off" and Type "X10" (type isn't important here).
 
 1. Edit your new switch and set these scripts as "on/off" actions:
