@@ -116,7 +116,7 @@ chmod u+x smappee_plug_control.sh
 ./smappee_plug_control.sh list
 ```
 
-You'll see an output like this one:
+1. You'll see an output like this one:
 
 ```bash
 Listing available plugs
