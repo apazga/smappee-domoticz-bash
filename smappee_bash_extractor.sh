@@ -11,7 +11,7 @@ TMPDIR="/var/tmp"
 
 # Single phase (1) or Three-Phase (0) electric power
 # 
-SINGLE_PHASE=0
+SINGLE_PHASE=1
 
 # Virtual sensors index and enable flags (to use them or not)
 # Enable values you want to read & push to Domoticz (1 to enable or 0 to disable)
@@ -65,9 +65,7 @@ if [ ! -d "$TMPDIR" ]; then
 fi
 
 # Get values from Smappee
-#SMAP=$(curl http://${SMAPPEE_IP}/gateway/apipublic/reportInstantaneousValues)
-#SMAP=$(cat 1phase.txt)
-SMAP=$(cat 3phase.txt)
+SMAP=$(curl http://${SMAPPEE_IP}/gateway/apipublic/reportInstantaneousValues)
 ERR=$(echo "$SMAP" | grep -c Couldn)
 # 'Couldn' means that curl couldn't do what's needed, for example, when Smappee's network connection is temporarily out
 # So if no error, we continue to try to get values from Smappee
@@ -78,10 +76,8 @@ then
   ERR=$(echo "$SMAP" | grep -c error)
   if [ "$ERR" -eq 1 ]
   then
-    #curl -H "Content-Type: application/json" -X POST -d "admin" http://$SMAPPEE_IP/gateway/apipublic/logon
-    #SMAP=$(curl http://${SMAPPEE_IP}/gateway/apipublic/reportInstantaneousValues)
-    SMAP=$(cat 3phase.txt)
-    #SMAP=$(cat 3phase.txt)
+    curl -H "Content-Type: application/json" -X POST -d "admin" http://$SMAPPEE_IP/gateway/apipublic/logon
+    SMAP=$(curl http://${SMAPPEE_IP}/gateway/apipublic/reportInstantaneousValues)
   fi
 
   #
@@ -95,11 +91,9 @@ then
   # Single phase values
   if [ $SINGLE_PHASE -eq 1 ]; then
       # Ampere
-      #AMPS=$(echo "$SMAP" | sed -e 's|.*urrent=\(.*\)|\1|' -e 's|\(.\{1,4\}\).*|\1|' | head -1)
       WATTS=$(echo "$VALUES" | awk -F'=' '{print $2}' | cut -c1-4)
       
       # Watts
-      #WATTS=$(echo "$SMAP" | sed -e 's|.* activePower=\(.*\)|\1|' -e 's|\(.\{1,6\}\).*|\1|' | head -1)
       WATTS=$(echo "$VALUES" | awk -F'=' '{print $3}' | cut -c1-6)
 
   # Three phase values
