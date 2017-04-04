@@ -118,7 +118,7 @@ then
       APPARENT=$(echo "$VALUES" | awk -F'=' '{print $5}' | cut -c1-5)
 
       # Cosf
-      COSF=$(echo "$VALUES" | awk -F'=' '{print $6}' | cut -c1-c2)
+      COSF=$(echo "$VALUES" | awk -F'=' '{print $6}' | cut -c1-2)
 
   # Three phase values
   else
