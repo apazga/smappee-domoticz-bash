@@ -18,10 +18,6 @@
     -  Use $(..) instead of legacy `..`. [SC2006]
     -  Double quote to prevent globbing and word splitting. [SC2086]
 
-  - TODO:
-    - TEST it with three phase system
-    - (After testing it) Add to three-phase system reactive/cosfi/apparent values
-
 ## 2.1.0 (2016-08-24)
 
 Features:

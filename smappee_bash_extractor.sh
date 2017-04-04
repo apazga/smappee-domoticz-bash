@@ -16,33 +16,48 @@ SINGLE_PHASE=1
 # Virtual sensors index and enable flags (to use them or not)
 # Enable values you want to read & push to Domoticz (1 to enable or 0 to disable)
 
-# (ONLY SINGLE PHASE) Electric (Instant+Counter). Enabled by default
+# Watts - Electric (Instant+Counter). Enabled by default
+## Single Phase
 DOMOTICZ_WATTS_IDX="11"
-
-# (ONLY THREE PHASE) Electric (Instant+Counter). Enabled by default
+## Three Phase
 DOMOTICZ_WATTS_P1_IDX="21"
 DOMOTICZ_WATTS_P2_IDX="22"
 DOMOTICZ_WATTS_P3_IDX="23"
 
-# Voltage. Enabled by default
+# Voltage (Single or Three phase). Enabled by default
 DOMOTICZ_VOLTS_ENABLE=1
 DOMOTICZ_VOLTS_IDX="12"
 
-# Ampere (Single or Three phase, depending on your case). Enabled by default
+# Ampere (Single or Three phase). Enabled by default
 DOMOTICZ_AMPS_ENABLE=1
 DOMOTICZ_AMPS_IDX="13"
 
-# Custom sensor (cos phi). Disabled by default
+# Cos phi - Custom sensor (cos phi). Disabled by default
 DOMOTICZ_COSF_ENABLE=0
+## Single phase
 DOMOTICZ_COSF_IDX="14"
+## Three phase
+DOMOTICZ_COSF_P1_IDX="24"
+DOMOTICZ_COSF_P2_IDX="25"
+DOMOTICZ_COSF_P3_IDX="26"
 
-# Custom sensor (reactive, unit var). Disabled by default
+# Reactive power - Custom sensor (reactive, unit var). Disabled by default
 DOMOTICZ_REACT_ENABLE=0
+## Single phase
 DOMOTICZ_REACT_IDX="15"
+## Three phase
+DOMOTICZ_REACT_P1_IDX="27"
+DOMOTICZ_REACT_P2_IDX="28"
+DOMOTICZ_REACT_P3_IDX="29"
 
-# Custom sensor (apparent, unit VA). Disabled by default
+# Apparent power - Custom sensor (apparent, unit VA). Disabled by default
 DOMOTICZ_APPARENT_ENABLE=0
+## Single phase
 DOMOTICZ_APPARENT_IDX="16"
+## Three phase
+DOMOTICZ_APPARENT_P1_IDX="30"
+DOMOTICZ_APPARENT_P2_IDX="31"
+DOMOTICZ_APPARENT_P3_IDX="32"
 
 ## Development flags
 # Push values to domoticz (1) or not (0). If not, they are displayed in stdout
@@ -96,6 +111,15 @@ then
       # Watts
       WATTS=$(echo "$VALUES" | awk -F'=' '{print $3}' | cut -c1-6)
 
+      # React
+      REACT=$(echo "$VALUES" | awk -F'=' '{print $4}' | cut -c1-5)
+
+      # React
+      APPARENT=$(echo "$VALUES" | awk -F'=' '{print $5}' | cut -c1-5)
+
+      # Cosf
+      COSF=$(echo "$VALUES" | awk -F'=' '{print $6}' | cut -c1-c2)
+
   # Three phase values
   else
       # Ampere
@@ -112,12 +136,26 @@ then
       WATTS_P2=$(echo "$WATTS_3P" | awk 'NR==2')
       WATTS_P3=$(echo "$WATTS_3P" | awk 'NR==3')
 
-  fi
+      # React
+      REACT_3P=$(echo "$VALUES" | awk -F'=' '{print $4}' | cut -c1-5)
+      REACT_P1=$(echo "$REACT_3P" | awk 'NR==1')
+      REACT_P2=$(echo "$REACT_3P" | awk 'NR==2')
+      REACT_P3=$(echo "$REACT_3P" | awk 'NR==3')
 
-  # TODO: New implementation with single/three phase for COSF, REACT & APPARENT, after testing WATTS 3 PHASE
-  COSF=$(echo "$SMAP" | sed -e 's|.* cosfi=\(.*\)|\1|' -e 's|\(.\{1,2\}\).*|\1|' | head -1)
-  REACT=$(echo "$SMAP" | sed -e 's|.* reactivePower=\(.*\)|\1|' -e 's|\(.\{1,6\}\).*|\1|' | head -1)
-  APPARENT=$(echo "$SMAP" | sed -e 's|.* apparentPower=\(.*\)|\1|' -e 's|\(.\{1,6\}\).*|\1|' | head -1)
+      # Apparent
+      APPARENT_3P=$(echo "$VALUES" | awk -F'=' '{print $5}' | cut -c1-6)
+      APPARENT_P1=$(echo "$APPARENT_3P" | awk 'NR==1')
+      APPARENT_P2=$(echo "$APPARENT_3P" | awk 'NR==2')
+      APPARENT_P3=$(echo "$APPARENT_3P" | awk 'NR==3')
+
+      # Cosfi
+      COSF_3P=$(echo "$VALUES" | awk -F'=' '{print $6}' | cut -c1-2)
+      COSF_P1=$(echo "$COSF_3P" | awk 'NR==1')
+      COSF_P2=$(echo "$COSF_3P" | awk 'NR==2')
+      COSF_P3=$(echo "$COSF_3P" | awk 'NR==3')
+
+
+  fi
 
 else
         VOLTS=$(cat $TMPDIR/volts)
@@ -131,6 +169,18 @@ else
         WATTS_P1=$(cat $TMPDIR/watts_p1)
         WATTS_P2=$(cat $TMPDIR/watts_p2)
         WATTS_P3=$(cat $TMPDIR/watts_p3)
+        
+        REACT_P1=$(cat $TMPDIR/react_p1)
+        REACT_P2=$(cat $TMPDIR/react_p2)
+        REACT_P3=$(cat $TMPDIR/react_p3)
+
+        APPARENT_P1=$(cat $TMPDIR/apparent_p1)
+        APPARENT_P2=$(cat $TMPDIR/apparent_p2)
+        APPARENT_P3=$(cat $TMPDIR/apparent_p3)
+
+        COSF_P1=$(cat $TMPDIR/cosf_p1)
+        COSF_P2=$(cat $TMPDIR/cosf_p2)
+        COSF_P3=$(cat $TMPDIR/cosf_p3)
     fi
 fi
 
@@ -139,25 +189,46 @@ if [ -z "$VOLTS" ]; then VOLTS=230; fi
 
 if [ $SINGLE_PHASE -eq 1 ]; then
     if [ -z "$AMPS" ]; then AMPS=2; fi
-    if [ -z "$WATTS" ]; then WATTS=460; fi
+    if [ -z "$WATTS" ]; then WATTS=100; fi
+    if [ -z "$REACT" ]; then REACT=110; fi
+    if [ -z "$APPARENT" ]; then APPARENT=120; fi
     if [ -z "$COSF" ]; then COSF=1; fi
-    if [ -z "$REACT" ]; then REACT=480; fi
-    if [ -z "$APPARENT" ]; then APPARENT=500; fi
     
     # echo to save values. If Smappee is not in mood at next run, we'll use these instead.
     echo $WATTS > $TMPDIR/watts 
-    echo $COSF  > $TMPDIR/cosf
     echo $REACT > $TMPDIR/react
     echo $APPARENT > $TMPDIR/apparent
+    echo $COSF  > $TMPDIR/cosf
 else
     if [ -z "$AMPS" ]; then AMPS="2;2;2"; fi
-    if [ -z "$WATTS_P1" ]; then WATTS=460; fi
-    if [ -z "$WATTS_P2" ]; then WATTS=460; fi
-    if [ -z "$WATTS_P3" ]; then WATTS=460; fi
+    if [ -z "$WATTS_P1" ]; then WATTS_P1=100; fi
+    if [ -z "$WATTS_P2" ]; then WATTS_P2=100; fi
+    if [ -z "$WATTS_P3" ]; then WATTS_P3=100; fi
     
     echo "$WATTS_P1" > $TMPDIR/watts_p1
     echo "$WATTS_P2" > $TMPDIR/watts_p2
     echo "$WATTS_P3" > $TMPDIR/watts_p3
+    
+    if [ -z "$REACT_P1" ]; then REACT_P1=110; fi
+    if [ -z "$REACT_P2" ]; then REACT_P2=110; fi
+    if [ -z "$REACT_P3" ]; then REACT_P3=110; fi
+    echo "$REACT_P1" > $TMPDIR/react_p1
+    echo "$REACT_P2" > $TMPDIR/react_p2
+    echo "$REACT_P3" > $TMPDIR/react_p3
+
+    if [ -z "$APPARENT_P1" ]; then APPARENT_P1=120; fi
+    if [ -z "$APPARENT_P2" ]; then APPARENT_P2=120; fi
+    if [ -z "$APPARENT_P3" ]; then APPARENT_P3=120; fi
+    echo "$APPARENT_P1" > $TMPDIR/apparent_p1
+    echo "$APPARENT_P2" > $TMPDIR/apparent_p2
+    echo "$APPARENT_P3" > $TMPDIR/apparent_p3
+
+    if [ -z "$COSF_P1" ]; then COSF_P1=1; fi
+    if [ -z "$COSF_P2" ]; then COSF_P2=1; fi
+    if [ -z "$COSF_P3" ]; then COSF_P3=1; fi
+    echo "$COSF_P1" > $TMPDIR/cosf_p1
+    echo "$COSF_P2" > $TMPDIR/cosf_p2
+    echo "$COSF_P3" > $TMPDIR/cosf_p3
 fi
 
 echo $VOLTS > $TMPDIR/volts
@@ -197,9 +268,9 @@ else
     WH_P2=$(echo "$WATTS_P2"\*0.0166667+$CUM_P2|bc)
     WH_P3=$(echo "$WATTS_P3"\*0.0166667+$CUM_P3|bc)
 
-    echo "$WH_P1" > /$TMPDIR/wh_p1
-    echo "$WH_P2" > /$TMPDIR/wh_p2
-    echo "$WH_P3" > /$TMPDIR/wh_p3
+    echo "$WH_P1" > $TMPDIR/wh_p1
+    echo "$WH_P2" > $TMPDIR/wh_p2
+    echo "$WH_P3" > $TMPDIR/wh_p3
 fi
 
 
@@ -214,13 +285,40 @@ then
     curl -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_AMPS_IDX}&nvalue=0&svalue=${AMPS}"
   fi
   if [ "$DOMOTICZ_COSF_ENABLE" -eq 1 ]; then
-    curl -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_COSF_IDX}&nvalue=0&svalue=${COSF}"
+      if [ $SINGLE_PHASE -eq 1 ]; then
+          curl -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_COSF_IDX}&nvalue=0&svalue=${COSF}"
+      else
+          CURLURL_P1="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_COSF_P1_IDX}&nvalue=0&svalue=${COSF_P1}"
+          CURLURL_P2="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_COSF_P2_IDX}&nvalue=0&svalue=${COSF_P2}"
+          CURLURL_P3="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_COSF_P3_IDX}&nvalue=0&svalue=${COSF_P3}"
+          curl -k "$CURLURL_P1"
+          curl -k "$CURLURL_P2"
+          curl -k "$CURLURL_P3"
+      fi
   fi
   if [ "$DOMOTICZ_REACT_ENABLE" -eq 1 ]; then
-    curl -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_REACT_IDX}&nvalue=0&svalue=${REACT}"
+      if [ $SINGLE_PHASE -eq 1 ]; then
+          curl -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_REACT_IDX}&nvalue=0&svalue=${REACT}"
+      else
+          CURLURL_P1="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_REACT_P1_IDX}&nvalue=0&svalue=${REACT_P1}"
+          CURLURL_P2="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_REACT_P2_IDX}&nvalue=0&svalue=${REACT_P2}"
+          CURLURL_P3="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_REACT_P3_IDX}&nvalue=0&svalue=${REACT_P3}"
+          curl -k "$CURLURL_P1"
+          curl -k "$CURLURL_P2"
+          curl -k "$CURLURL_P3"
+      fi
   fi
   if [ "$DOMOTICZ_APPARENT_ENABLE" -eq 1 ]; then
-    curl -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_APPARENT_IDX}&nvalue=0&svalue=${APPARENT}"
+      if [ $SINGLE_PHASE -eq 1 ]; then
+          curl -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_APPARENT_IDX}&nvalue=0&svalue=${APPARENT}"
+      else
+          CURLURL_P1="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_APPARENT_P1_IDX}&nvalue=0&svalue=${APPARENT_P1}"
+          CURLURL_P2="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_APPARENT_P2_IDX}&nvalue=0&svalue=${APPARENT_P2}"
+          CURLURL_P3="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_APPARENT_P3_IDX}&nvalue=0&svalue=${APPARENT_P3}"
+          curl -k "$CURLURL_P1"
+          curl -k "$CURLURL_P2"
+          curl -k "$CURLURL_P3"
+      fi
   fi
 
   # Push watts and watt/hour to Domoticz
@@ -238,7 +336,10 @@ then
 
 else
   if [ $SINGLE_PHASE -ne 1 ]; then
-    WATTS="${WATTS_P1};${WATTS_P2};${WATTS_P3}" 
+    WATTS="${WATTS_P1};${WATTS_P2};${WATTS_P3}"
+    COSF="${COSF_P1};${COSF_P2};${COSF_P3}"
+    REACT="${REACT_P1};${REACT_P2};${REACT_P3}"
+    APPARENT="${APPARENT_P1};${APPARENT_P2};${APPARENT_P3}"
     WH="${WH_P1};${WH_P2};${WH_P3}" 
   fi
   echo "Domoticz push disabled. Values:
