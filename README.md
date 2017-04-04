@@ -75,7 +75,7 @@ sudo apt-get update && sudo apt-get install curl sed bc
 6) Edit required variables in `smappee_bash_extractor.sh` script. You should configure all variables included in "User configurable values zone".
   **WARNING**: Check twice the idx for each variable in your Domoticz Device list to ensure all match, to avoid "pushing" data to a different sensor
 
-  First enable the values you want to use in Domoticz. Every variable has its own "DOMOTICZ_XXXX_ENABLE". e.g.:
+  First enable the values you want to use in Domoticz. Every variable has its own `DOMOTICZ_XXXX_ENABLE`. e.g.:
   ```bash
   DOMOTICZ_VOLTS_ENABLE=1
   DOMOTICZ_AMPS_ENABLE=1
@@ -85,10 +85,10 @@ sudo apt-get update && sudo apt-get install curl sed bc
 
   You should configure the following variables:
   * **DOMOTICZ_URL**: Specify your Domoticz URL, using http or https (depending on your Domoticz configuration)
-  * **DOMOTICZ_USERPASS**: If you need authentication, uncomment and use the given format "-u myuser:mypass"
+  * **DOMOTICZ_USERPASS**: If you need authentication, uncomment and use the given format `-u myuser:mypass`
   * **SMAPPEE_IP**: The IP of your Smappee hub
-  * **TMPDIR**: Temporary directory for the script (see section "Suggestion: Use a RAM Disk")
-  * **DOMOTICZ_WATTS_IDX**: idx for your Electric (Instant+Counter) virtual sensor
+  * **TMPDIR**: Temporary directory for the script (see section [Suggestion: Use a RAM Disk](#suggestion-use-a-ram-disk))
+  * **DOMOTICZ_WATTS_IDX**: idx for your Electric (Instant + Counter) virtual sensor
   * **DOMOTICZ_VOLTS_IDX**: idx for your Voltage virtual sensor
   * **DOMOTICZ_AMPS_IDX**: idx for your Ampere (1 phase) virtual sensor
   * **DOMOTICZ_COSF_IDX**: idx for your Custom sensor (cos phi) virtual sensor
@@ -109,7 +109,7 @@ DOMOTICZ_WATTS_P3_IDX="23"
   chmod u+x smappee_bash_extractor.sh
   ./smappee_bash_extractor.sh
   ```
-  You can also use "DOMOTICZ_PUSH=0" variable, to test the output without pushing any value to Domoticz.
+  You can also use `DOMOTICZ_PUSH=0` variable, to test the output without pushing any value to Domoticz.
 
 
 ## Cron example to run this script every minute
