@@ -7,7 +7,13 @@
 ####### Start User configurable values zone #######
 DOMOTICZ_URL="http://127.0.0.1:8080"
 SMAPPEE_IP="192.168.1.111"
+# Dir for tmp values
 TMPDIR="/var/tmp"
+
+# If no authentication is needed for Domoticz
+DOMOTICZ_USERPASS=""
+# Uncomment if auth needed
+# DOMOTICZ_USERPASS="-u myuser:mypass"
 
 # Single phase (1) or Three-Phase (0) electric power
 # 
@@ -279,59 +285,59 @@ if [ $DOMOTICZ_PUSH -eq 1 ]
 then
   # Push enabled values to Domoticz
   if [ "$DOMOTICZ_VOLTS_ENABLE" -eq 1 ]; then
-    curl -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_VOLTS_IDX}&nvalue=0&svalue=${VOLTS}"
+    curl ${DOMOTICZ_USERPASS} -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_VOLTS_IDX}&nvalue=0&svalue=${VOLTS}"
   fi
   if [ "$DOMOTICZ_AMPS_ENABLE" -eq 1 ]; then
-    curl -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_AMPS_IDX}&nvalue=0&svalue=${AMPS}"
+    curl ${DOMOTICZ_USERPASS} -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_AMPS_IDX}&nvalue=0&svalue=${AMPS}"
   fi
   if [ "$DOMOTICZ_COSF_ENABLE" -eq 1 ]; then
       if [ $SINGLE_PHASE -eq 1 ]; then
-          curl -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_COSF_IDX}&nvalue=0&svalue=${COSF}"
+          curl ${DOMOTICZ_USERPASS} -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_COSF_IDX}&nvalue=0&svalue=${COSF}"
       else
           CURLURL_P1="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_COSF_P1_IDX}&nvalue=0&svalue=${COSF_P1}"
           CURLURL_P2="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_COSF_P2_IDX}&nvalue=0&svalue=${COSF_P2}"
           CURLURL_P3="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_COSF_P3_IDX}&nvalue=0&svalue=${COSF_P3}"
-          curl -k "$CURLURL_P1"
-          curl -k "$CURLURL_P2"
-          curl -k "$CURLURL_P3"
+          curl ${DOMOTICZ_USERPASS} -k "$CURLURL_P1"
+          curl ${DOMOTICZ_USERPASS} -k "$CURLURL_P2"
+          curl ${DOMOTICZ_USERPASS} -k "$CURLURL_P3"
       fi
   fi
   if [ "$DOMOTICZ_REACT_ENABLE" -eq 1 ]; then
       if [ $SINGLE_PHASE -eq 1 ]; then
-          curl -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_REACT_IDX}&nvalue=0&svalue=${REACT}"
+          curl ${DOMOTICZ_USERPASS} -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_REACT_IDX}&nvalue=0&svalue=${REACT}"
       else
           CURLURL_P1="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_REACT_P1_IDX}&nvalue=0&svalue=${REACT_P1}"
           CURLURL_P2="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_REACT_P2_IDX}&nvalue=0&svalue=${REACT_P2}"
           CURLURL_P3="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_REACT_P3_IDX}&nvalue=0&svalue=${REACT_P3}"
-          curl -k "$CURLURL_P1"
-          curl -k "$CURLURL_P2"
-          curl -k "$CURLURL_P3"
+          curl ${DOMOTICZ_USERPASS} -k "$CURLURL_P1"
+          curl ${DOMOTICZ_USERPASS} -k "$CURLURL_P2"
+          curl ${DOMOTICZ_USERPASS} -k "$CURLURL_P3"
       fi
   fi
   if [ "$DOMOTICZ_APPARENT_ENABLE" -eq 1 ]; then
       if [ $SINGLE_PHASE -eq 1 ]; then
-          curl -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_APPARENT_IDX}&nvalue=0&svalue=${APPARENT}"
+          curl ${DOMOTICZ_USERPASS} -k "${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_APPARENT_IDX}&nvalue=0&svalue=${APPARENT}"
       else
           CURLURL_P1="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_APPARENT_P1_IDX}&nvalue=0&svalue=${APPARENT_P1}"
           CURLURL_P2="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_APPARENT_P2_IDX}&nvalue=0&svalue=${APPARENT_P2}"
           CURLURL_P3="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_APPARENT_P3_IDX}&nvalue=0&svalue=${APPARENT_P3}"
-          curl -k "$CURLURL_P1"
-          curl -k "$CURLURL_P2"
-          curl -k "$CURLURL_P3"
+          curl ${DOMOTICZ_USERPASS} -k "$CURLURL_P1"
+          curl ${DOMOTICZ_USERPASS} -k "$CURLURL_P2"
+          curl ${DOMOTICZ_USERPASS} -k "$CURLURL_P3"
       fi
   fi
 
   # Push watts and watt/hour to Domoticz
   if [ $SINGLE_PHASE -eq 1 ]; then
     CURLURL="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_WATTS_IDX}&nvalue=0&svalue=${WATTS};${WH}"
-    curl -k "$CURLURL"
+    curl ${DOMOTICZ_USERPASS} -k "$CURLURL"
   else
     CURLURL_P1="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_WATTS_P1_IDX}&nvalue=0&svalue=${WATTS_P1};${WH_P1}"
     CURLURL_P2="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_WATTS_P2_IDX}&nvalue=0&svalue=${WATTS_P2};${WH_P2}"
     CURLURL_P3="${DOMOTICZ_URL}/json.htm?type=command&param=udevice&idx=${DOMOTICZ_WATTS_P3_IDX}&nvalue=0&svalue=${WATTS_P3};${WH_P3}"
-    curl -k "$CURLURL_P1"
-    curl -k "$CURLURL_P2"
-    curl -k "$CURLURL_P3"
+    curl ${DOMOTICZ_USERPASS} -k "$CURLURL_P1"
+    curl ${DOMOTICZ_USERPASS} -k "$CURLURL_P2"
+    curl ${DOMOTICZ_USERPASS} -k "$CURLURL_P3"
   fi
 
 else

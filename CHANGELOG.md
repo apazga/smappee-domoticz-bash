@@ -12,6 +12,7 @@
   - Added Reactive Power and Apparent Power values
   - Added possibility to select which values should be pushed to Domoticz
   - Added required tools check
+  - Added possibility to login, if needed (Domoticz user/pass)
   - Many code improvements
   
   - Bash lint fixes:
