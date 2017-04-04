@@ -106,7 +106,7 @@ then
   # Single phase values
   if [ $SINGLE_PHASE -eq 1 ]; then
       # Ampere
-      WATTS=$(echo "$VALUES" | awk -F'=' '{print $2}' | cut -c1-4)
+      AMPS=$(echo "$VALUES" | awk -F'=' '{print $2}' | cut -c1-4)
       
       # Watts
       WATTS=$(echo "$VALUES" | awk -F'=' '{print $3}' | cut -c1-6)
