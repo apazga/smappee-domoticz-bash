@@ -34,24 +34,24 @@ sudo apt-get update && sudo apt-get install curl sed bc
 ```
 
 ## How to use it
-1. Clone this repo
+1) Clone this repo
   ```bash
   git clone https://github.com/apazga/smappee-domoticz-bash.git
   ```
 
-1. Create the directory where the script will be (or use the one you prefer)
+2) Create the directory where the script will be (or use the one you prefer)
   ```bash
   mkdir -p /home/pi/_scripts/crons
   ```
 
-1. Copy smappee_bash_extractor.sh to the desired location
+3) Copy smappee_bash_extractor.sh to the desired location
   ```bash
   cp smappee-domoticz-bash/smappee_bash_extractor.sh  /home/pi/_scripts/crons
   ```
 
-1. Add a new "Smappee" hardware in your Domoticz server as "Dummy (Does nothing, use for virtual switches only)"
+4) Add a new "Smappee" hardware in your Domoticz server as "Dummy (Does nothing, use for virtual switches only)"
 
-1. Add four new "Virtual Sensors" to this new hardware (from Hardware list, button "Create Virtual Sensors"):
+5) Add new "Virtual Sensors" to this new hardware (from Hardware list, button "Create Virtual Sensors"):
   ```
   Name: Energy Consumption
   Type: Electric (Instant+counter)
@@ -60,30 +60,57 @@ sudo apt-get update && sudo apt-get install curl sed bc
   Type: Voltage
 
   Name: Ampere
-  Type: Ampere (1 phase)
+  Type: Ampere (1 phase or 3 phase, depending on your case)
 
   Name: Cos Phi
   Type: Custom sensor
+
+  Name: Reactive power
+  Type: Custom sensor
+  
+  Name: Apparent power
+  Type: Custom sensor
 ```
 
-1. Edit required variables in `smappee_bash_extractor.sh` script. You should configure all variables included in "User configurable values zone".
+6) Edit required variables in `smappee_bash_extractor.sh` script. You should configure all variables included in "User configurable values zone".
   **WARNING**: Check twice the idx for each variable in your Domoticz Device list to ensure all match, to avoid "pushing" data to a different sensor
+
+  First enable the values you want to use in Domoticz. Every variable has its own "DOMOTICZ_XXXX_ENABLE". e.g.:
+  ```bash
+  DOMOTICZ_VOLTS_ENABLE=1
+  DOMOTICZ_AMPS_ENABLE=1
+  DOMOTICZ_COSF_ENABLE=0
+  ...
+  ```
 
   You should configure the following variables:
   * **DOMOTICZ_URL**: Specify your Domoticz URL, using http or https (depending on your Domoticz configuration)
+  * **DOMOTICZ_USERPASS**: If you need authentication, uncomment and use the given format "-u myuser:mypass"
   * **SMAPPEE_IP**: The IP of your Smappee hub
   * **TMPDIR**: Temporary directory for the script (see section "Suggestion: Use a RAM Disk")
   * **DOMOTICZ_WATTS_IDX**: idx for your Electric (Instant+Counter) virtual sensor
   * **DOMOTICZ_VOLTS_IDX**: idx for your Voltage virtual sensor
   * **DOMOTICZ_AMPS_IDX**: idx for your Ampere (1 phase) virtual sensor
   * **DOMOTICZ_COSF_IDX**: idx for your Custom sensor (cos phi) virtual sensor
+  * **DOMOTICZ_REACT_IDX**: idx for your Custom sensor (reactive power) virtual sensor
+  * **DOMOTICZ_APPARENT_IDX**: idx for your Custom sensor (apparent power) virtual sensor
 
-1. Test it before setting it as a cron job
+**NOTE**: Three phase variables are similar (you'll find them in the code), but you'll need one sensor for each value, e.g.: 
+```bash
+DOMOTICZ_WATTS_P1_IDX="21"
+DOMOTICZ_WATTS_P2_IDX="22"
+DOMOTICZ_WATTS_P3_IDX="23"
+...
+```
+
+7) Test it before setting it as a cron job
   ```bash
   cd /home/pi/_scripts/crons
   chmod u+x smappee_bash_extractor.sh
   ./smappee_bash_extractor.sh
   ```
+  You can also use "DOMOTICZ_PUSH=0" variable, to test the output without pushing any value to Domoticz.
+
 
 ## Cron example to run this script every minute
 Add the following line to your user crontab (`crontab -e`)
