@@ -23,7 +23,7 @@ then
   echo -e "\e[33mSyntax: $0  command  plug_key\e[0m"
   echo -e "\e[36mExample 1: $0 list\e[0m --> List available plugs"
   echo -e "\e[36mExample 2: $0 1 3\e[0m  --> Set plug 3 to on"
-  echo -e "\e[36mExample 3: $0 2 3\e[0m  --> Set plug 3 to off"
+  echo -e "\e[36mExample 3: $0 0 3\e[0m  --> Set plug 3 to off"
   exit 1
 fi
 
